@@ -1,0 +1,7 @@
+{
+  "stops": [
+    {"name": "Brandenburger Tor"},
+    {"name": "Alexanderplatz"}
+  ],
+  "optimize": true
+}

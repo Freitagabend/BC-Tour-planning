@@ -1,0 +1,8 @@
+{
+  "optimized_route": {
+    "order": ["Brandenburger Tor", "Alexanderplatz"],
+    "distance_km": 2.5,
+    "duration_min": 7.0,
+    "path": [[52.5163, 13.3777], [52.5219, 13.4132]]
+  }
+}
