@@ -8,89 +8,100 @@ The backend uses OpenRouteService for geocoding and route optimization.
 
 ## 📁 Project Structure
 
-BC-Tour-planning/
-│
-├── backend/ # FastAPI backend for route optimization
-├── al-app/ # AL extension for Business Central
-├── test-data/ # Sample requests and responses
-├── docs/ # API documentation
-└── .github/ # CI/CD (GitHub Actions)
+- backend/ – FastAPI backend for route optimization
+- al-app/ – AL extension for Microsoft Business Central
+- test-data/ – Sample request/response JSON files
+- docs/ – API documentation
+- .github/ – CI/CD workflow (GitHub Actions)
+
+---
 
 ## 🚀 Setup
 
 ### 🔧 Backend (Python + FastAPI)
 
-cd backend
-python -m venv venv
-source venv/bin/activate # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-cp .env.example .env # Add your OpenRouteService API key to the .env file
+1. Navigate to the backend directory:
 
-uvicorn main:app --reload
+   ```
+   cd backend
+   ```
 
-# → Your API will be available at:
+2. Create and activate virtual environment:
 
-# http://localhost:8000/route
+   - macOS/Linux:
+     ```
+     python -m venv venv
+     source venv/bin/activate
+     ```
+   - Windows:
+     ```
+     python -m venv venv
+     venv\Scripts\activate
+     ```
+
+3. Install dependencies:
+
+   ```
+   pip install -r requirements.txt
+   ```
+
+4. Copy example environment file and add your OpenRouteService API key:
+
+   ```
+   cp .env.example .env
+   ```
+
+5. Run the API:
+   ```
+   uvicorn main:app --reload
+   ```
+
+API will be available at: http://localhost:8000/route
+
+---
 
 ### 🧩 AL Extension (Business Central)
 
-1. Open the al-app/ folder in Visual Studio Code
-2. Set up your connection to a Business Central sandbox or Docker container
-3. Press F5 or use the "AL: Publish" command
+1. Open `al-app/` in Visual Studio Code
+2. Connect to your BC sandbox or container
+3. Press `F5` or use `AL: Publish`
 
-→ After publishing, new actions are available in:
+After publishing, new actions will be available in:
 
 - Customer List
-- Sales Orders
-- → Action: "Plan Route"
+- Sales Orders  
+  → Action: "Plan Route"
+
+---
 
 ## 📡 API Reference
 
 ### POST /route
 
-#### Example Request
+**Example Request**
 
+```json
 {
-"stops": [
-{"name": "Brandenburg Gate, Berlin"},
-{"name": "Alexanderplatz, Berlin"}
-],
-"optimize": true
+  "stops": [
+    { "name": "Brandenburg Gate, Berlin" },
+    { "name": "Alexanderplatz, Berlin" }
+  ],
+  "optimize": true
 }
+```
 
-#### Example Response
+**Example Response**
 
+```json
 {
-"optimized_route": {
-"order": ["Brandenburg Gate", "Alexanderplatz"],
-"distance_km": 2.5,
-"duration_min": 7.0,
-"path": [[52.5163, 13.3777], [52.5219, 13.4132]]
+  "optimized_route": {
+    "order": ["Brandenburg Gate", "Alexanderplatz"],
+    "distance_km": 2.5,
+    "duration_min": 7.0,
+    "path": [
+      [52.5163, 13.3777],
+      [52.5219, 13.4132]
+    ]
+  }
 }
-}
-
-## ⚙️ CI/CD (GitHub Actions)
-
-Automatically triggered on each push or pull request:
-
-- ✅ Backend: Dependency install, lint check (flake8), optional tests
-- 🛠️ AL App: (optional, build with Docker + license file if needed)
-
-## 🧪 Test Data
-
-See the test-data/ folder:
-
-- test-request.json
-- sample-response.json
-
-## 📄 License
-
-MIT (feel free to modify)
-
----
-
-## 👤 Author
-
-**Publisher:** Freitagabend  
-**Project Name:** BC-Tour-planning  
-**Repository:** https://github.com/Freitagabend/BC-Tour-planning/
+```
