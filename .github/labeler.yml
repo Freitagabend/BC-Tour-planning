@@ -1,0 +1,16 @@
+🖥️al:
+  - changed-files:
+      - any-glob-to-any-file:
+          - al-app/src/**
+          - al-app/test/**
+
+📱mobile:
+  - changed-files:
+      - any-glob-to-any-file:
+          - mobile/lib/**
+          - mobile/test/**
+
+🗄️server:
+  - changed-files:
+      - any-glob-to-any-file:
+          - backend/**
