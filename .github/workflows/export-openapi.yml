@@ -25,6 +25,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Start FastAPI in background
+        env:
+          ORS_API_KEY: ${{ secrets.ORS_API_KEY }}
         run: |
           cd backend
           uvicorn main:app --host 0.0.0.0 --port 8000 &
