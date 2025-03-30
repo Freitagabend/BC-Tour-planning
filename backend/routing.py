@@ -1,48 +1,59 @@
-import openrouteservice
-from openrouteservice import convert
 from typing import List
 from models import Stop, Route
+import openrouteservice
 from config import ORS_API_KEY
-
 # API-Key hier einfügen
 client = openrouteservice.Client(key=ORS_API_KEY)
 
 def optimize_route(stops: List[Stop]) -> Route:
+    if len(stops) < 2:
+        raise ValueError("At least 2 stops required.")
     coords = [[s.lon, s.lat] for s in stops]
+    
+    jobs = []
+    for i, coord in enumerate(coords):
+        jobs.append({
+            "id": i + 1,
+            "location": coord,
+            "service": 300,        
+            "delivery": [1],        
+            "skills": [1]           
+        })
 
-    # Optimierung (Traveling Salesman Problem)
-    result = client.optimization(
-        jobs=[{"id": i + 1, "location": coords[i]} for i in range(len(coords))],
-        vehicles=[{
-            "id": 1,
-            "start": coords[0],
-            "end": coords[0]  # Runde Tour, Start = Ziel
-        }]
-    )
 
-    # Reihenfolge extrahieren
-    job_map = {job["id"]: stops[i] for i, job in enumerate(result["jobs"])}
-    steps = result["routes"][0]["steps"]
-    ordered = [job_map[step["job_id"]] for step in steps]
+    vehicles = [{
+        "id": 1,
+        "profile": "driving-car",
+        "start": coords[0],
+        "end": coords[0],
+        "capacity": [4],
+        "skills": [1],
+        "time_window": [28800, 64800]  
+    }]
+    
+    request_body = {
+        "jobs": jobs,
+        "vehicles": vehicles
+    }
 
-    # Route berechnen (echte Strecke)
-    route_data = client.directions(
-        coordinates=[[s.lon, s.lat] for s in ordered],
-        profile='driving-car',
-        format='geojson'
-    )
+    result = client.request("/optimization", {}, request_body, post_json=True)
+    
+    route = result["routes"][0]
+    steps = route["steps"]
 
-    dist = route_data["features"][0]["properties"]["summary"]["distance"] / 1000
-    duration = route_data["features"][0]["properties"]["summary"]["duration"] / 60
-    geometry = route_data["features"][0]["geometry"]["coordinates"]
-    path = [[latlon[1], latlon[0]] for latlon in geometry]
+    names = [stops[step["job"] - 1].name for step in steps if "job" in step]
+    path = [stops[step["job"] - 1] for step in steps if "job" in step]
+    coords_latlon = [[s.lat, s.lon] for s in path]
 
     return Route(
-        order=[s.name for s in ordered],
-        distance_km=round(dist, 2),
-        duration_min=round(duration, 2),
-        path=path
+        order=names,
+        distance_km=round(route["distance"] / 1000, 2),
+        duration_min=round(route["duration"] / 60, 2),
+        path=coords_latlon
     )
+    
+    
+    
     
 def geocode_address(address: str) -> Stop:
     result = client.pelias_search(text=address)
