@@ -1,4 +1,4 @@
-name: Export OpenAPI Spec
+name: Export OpenAPI
 
 on:
   push:
