@@ -1,0 +1,21 @@
+{
+    "name": "BC Tour Planning",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "backend",
+    "workspaceFolder": "/workspace",
+    "customizations": {
+      "vscode": {
+        "settings": {
+          "terminal.integrated.defaultProfile.linux": "bash"
+        },
+        "extensions": [
+          "ms-python.python",
+          "dart-code.flutter",
+          "esbenp.prettier-vscode",
+          "ms-azuretools.vscode-docker"
+        ]
+      }
+    },
+    "postCreateCommand": "pip install -r backend/requirements.txt && flutter doctor"
+  }
+  
