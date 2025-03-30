@@ -40,10 +40,23 @@ jobs:
           mkdir -p open-api
           curl http://localhost:8000/openapi.json -o open-api/tourplanning_openapi.json
 
+
+      - name: Install OpenAPI Generator
+        run: |
+          npm install @openapitools/openapi-generator-cli -g
+
+      - name: Generate Flutter API client
+        run: |
+          rm -rf ./mobile/openapi
+          cd open-api
+          openapi-generator-cli generate -g dart -i ./tourplanning_openapi.json -o ../mobile/openapi
+          rm ../mobile/openapi/analysis_options.yaml
+      
       - name: Commit OpenAPI spec
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add open-api/tourplanning_openapi.json
-          git commit -m "Update OpenAPI spec" || echo "No changes"
+          git add mobile/openapi
+          git commit -m "Update OpenAPI spec and generated Flutter client" || echo "No changes"
           git push
