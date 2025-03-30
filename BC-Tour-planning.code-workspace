@@ -1,11 +1,14 @@
 {
-	"folders": [
-		{
-			"path": "al-app"
-		},
-		{
-			"path": "backend"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "al-app"
+    },
+    {
+      "path": "backend"
+    },
+    {
+      "path": ".devcontainer"
+    }
+  ],
+  "settings": {}
 }
