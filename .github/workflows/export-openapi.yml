@@ -1,0 +1,53 @@
+name: Export OpenAPI Spec
+
+on:
+  push:
+    paths:
+      - backend/**
+      - .github/workflows/export-openapi.yml
+
+jobs:
+  export-openapi:
+    runs-on: ubuntu-latest
+
+    services:
+      fastapi:
+        image: python:3.10-slim
+        ports:
+          - 8000:8000
+        options: >-
+          --health-cmd="curl --fail http://localhost:8000/docs || exit 1"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+        volumes:
+          - .:/app
+        command: >
+          bash -c "
+            cd /app/backend &&
+            pip install -r requirements.txt &&
+            uvicorn main:app --host 0.0.0.0 --port 8000
+          "
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Wait for FastAPI to be ready
+        run: |
+          echo "Waiting for FastAPI..."
+          sleep 10
+          curl --fail http://localhost:8000/docs
+
+      - name: Download OpenAPI Spec
+        run: |
+          mkdir -p open-api
+          curl http://localhost:8000/openapi.json -o open-api/tourplanning_openapi.json
+
+      - name: Commit OpenAPI spec
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add open-api/tourplanning_openapi.json
+          git commit -m "Update OpenAPI spec" || echo "No changes"
+          git push
