@@ -6,15 +6,15 @@ OPENAPI_GENERATOR_VERSION=v7.8.0
 function dart {
   rm -rf ../mobile/openapi
   cd ./templates/mobile/serialization/native
-  wget -O native_class.mustache https://raw.githubusercontent.com/OpenAPITools/openapi-generator/$OPENAPI_GENERATOR_VERSION/modules/openapi-generator/src/main/resources/dart2/serialization/native/native_class.mustache
+  wget -O native_class.mustache https://raw.githubusercontent.com/OpenAPITools/openapi-generator/refs/heads/master/modules/openapi-generator/src/main/resources/dart2/serialization/native/native_class.mustache
   patch --no-backup-if-mismatch -u native_class.mustache <native_class.mustache.patch
 
   cd ../../
-  wget -O api.mustache https://raw.githubusercontent.com/OpenAPITools/openapi-generator/$OPENAPI_GENERATOR_VERSION/modules/openapi-generator/src/main/resources/dart2/api.mustache
+  wget -O api.mustache https://raw.githubusercontent.com/OpenAPITools/openapi-generator/refs/heads/master/modules/openapi-generator/src/main/resources/dart2/api.mustache
   patch --no-backup-if-mismatch -u api.mustache <api.mustache.patch
 
   cd ../../
-  npx --yes @openapitools/openapi-generator-cli generate -g dart -i ./tourplanning-openapi.json -o ../mobile/openapi -t ./templates/mobile
+  npx --yes @openapitools/openapi-generator-cli generate -g dart -i ./tourplanning_openapi.json -o ../mobile/openapi -t ./templates/mobile
 
   # Post generate patches
   patch --no-backup-if-mismatch -u ../mobile/openapi/lib/api_client.dart <./patch/api_client.dart.patch
