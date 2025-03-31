@@ -13,9 +13,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Tourplanning',
       home: Scaffold(
-        appBar: AppBar(title: Text("Optimierte Route")),
-        body: FutureBuilder<TourResponse>(
-          future: api.routePost(
+        appBar: AppBar(title: const Text("Optimierte Route")),
+        body: FutureBuilder<TourResponse?>(
+          future: api.planRouteRoutePost(
             TourRequest(
               stops: [
                 Stop(name: "Brandenburger Tor"),
@@ -25,18 +25,20 @@ class MyApp extends StatelessWidget {
             ),
           ),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting)
-              return Center(child: CircularProgressIndicator());
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-            if (snapshot.hasError)
+            if (snapshot.hasError) {
               return Center(child: Text("Error: ${snapshot.error}"));
+            }
 
             final tour = snapshot.data!;
             return ListView.builder(
-              itemCount: tour.optimizedRoute?.order?.length ?? 0,
+              itemCount: tour.optimizedRoute.order.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(tour.optimizedRoute!.order![index]),
+                  title: Text(tour.optimizedRoute.order[index]),
                 );
               },
             );

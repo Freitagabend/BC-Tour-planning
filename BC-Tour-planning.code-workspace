@@ -1,19 +1,24 @@
 {
   "folders": [
     {
-      "path": "al-app"
-    },
-    {
-      "path": "backend"
-    },
-    {
+      "name": ".devcontainer",
       "path": ".devcontainer"
     },
     {
-      "path": "open-api"
+      "name": "al-app",
+      "path": "al-app"
     },
     {
+      "name": "backend",
+      "path": "backend"
+    },
+    {
+      "name": "mobile",
       "path": "mobile"
+    },
+    {
+      "name": "open-api",
+      "path": "open-api"
     }
   ],
   "settings": {}
