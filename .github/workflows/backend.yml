@@ -28,11 +28,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install flake8 pytest httpx
 
       - name: Check Linting (flake8)
         run: |
-          pip install flake8
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
-      # - name: Run Tests (optional)
-      #   run: pytest
+      - name: Run Tests
+        run: pytest
