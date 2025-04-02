@@ -11,8 +11,8 @@
 part of openapi.api;
 
 
-class DefaultApi {
-  DefaultApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
+class TourplanningApi {
+  TourplanningApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
   final ApiClient apiClient;
 
@@ -23,7 +23,7 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [TourRequest] tourRequest (required):
-  Future<Response> planRouteRoutePostWithHttpInfo(TourRequest tourRequest,) async {
+  Future<Response> planTourWithHttpInfo(TourRequest tourRequest,) async {
     // ignore: prefer_const_declarations
     final path = r'/route';
 
@@ -53,8 +53,8 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [TourRequest] tourRequest (required):
-  Future<TourResponse?> planRouteRoutePost(TourRequest tourRequest,) async {
-    final response = await planRouteRoutePostWithHttpInfo(tourRequest,);
+  Future<TourResponse?> planTour(TourRequest tourRequest,) async {
+    final response = await planTourWithHttpInfo(tourRequest,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
