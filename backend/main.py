@@ -2,9 +2,13 @@ from fastapi import FastAPI, HTTPException
 from models import TourRequest, TourResponse
 from routing import optimize_route, geocode_address
 
-app = FastAPI()
+app = FastAPI(
+    title="Tourplanning API",
+    description="API zur Berechnung und Optimierung von Liefer- oder Besuchsrouten.",
+    version="1.0.0"
+)
 
-@app.post("/route", response_model=TourResponse)
+@app.post("/route", response_model=TourResponse,tags=["Tourplanning"], operation_id="planTour")
 def plan_route(request: TourRequest):
     if len(request.stops) < 2:
         raise HTTPException(status_code=400, detail="At least two stops required")
