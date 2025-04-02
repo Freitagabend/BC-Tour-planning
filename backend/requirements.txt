@@ -2,5 +2,3 @@ fastapi
 uvicorn
 openrouteservice
 python-dotenv
-pytest
-httpx
